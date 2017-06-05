@@ -7,10 +7,12 @@
 %
 % This file is just to get started - You need the corresponding Logo
 %
-\documentclass[german,10pt,xcolor=colortbl,compress
-%,draft
-]{beamer}
 
+
+%\documentclass[german,10pt,xcolor=colortbl,compress
+%,draft
+%]{beamer}
+\documentclass[german,10pt,xcolor=colortbl,compress,handout]{beamer}
 \usepackage[macce]{inputenc}
 \usepackage[OT1]{fontenc}
 \usepackage{calc}
@@ -82,9 +84,9 @@
 		\pause
 		\item Idee: Wollen Testfunktion $T$, die zu gegebener Funktion $f: \mathbb{R}^n \to \mathbb{R}$ und einer Box $B_i$ aussagt:
 		 	\begin{itemize}
-			\item $T(f,B_i)=-1$, falls keine Nullstelle in der Box $B_i$
+			\item $T(f,B_i)=-1$, falls keine Nullstelle von f in der Box $B_i$ liegt
 			\item $T(f,B_i)=0$, falls keine Aussage getroffen werden kann
-			\item $T(f,B_i)=1$, falls genau eine Nullstelle in der Box $B_i$
+			\item $T(f,B_i)=1$, falls genau eine Nullstelle von f in der Box $B_i$ liegt
 			\end{itemize}
 		\end{itemize}
 		\pause
@@ -99,7 +101,7 @@
 		\end{theorem}
 		
 		\begin{itemize}
-		\item nulldimensionales Radikalideal $J \subseteq \mathbb{R}[x_1, \hdots, x_n]$ somit gegeben als eine Menge an Erzeugern $\{f_1, \hdots f_n\}, f_i \in \mathbb{R}[x_1, \hdots, x_n], 			i=1,\hdots,n$
+		\item nulldimensionales Radikalideal $I \subseteq \mathbb{R}[x_1, \hdots, x_n]$ somit gegeben als eine Menge an Erzeugern $\{f_1, \hdots f_n\}, f_i \in \mathbb{R}[x_1, \hdots, x_n], 			i=1,\hdots,n$
 		\pause
 		\item betrachte nun die Funktion $f:=\left( \begin{array}{c} f_1\\ \vdots \\ f_n \end{array} \right)$, $f:\mathbb{R}^n\to \mathbb{R}$  \\
 			
@@ -111,6 +113,7 @@
 	
 	\begin{frame}{Interval Newton step}
 		\begin{theorem}
+		Sei $\textbf{x}$ eine Box im $\mathbb{R}^n$ und $f:\mathbb{R}^n\to \mathbb{R}$. Dann gilt:
 		\begin{itemize}
 		\item[a)] Jede Lösung in $\textbf{x}$ liegt auch in $N(f,\textbf{x})$. \\
 		\pause
@@ -121,11 +124,11 @@
 		
 		\underline{Implementierung:} 
 		\\
-		Bisektion bis für jede der entstehenden Boxen eine der folgenden Bedingungen erfüllt:
+		Bisektion bis für jede der entstehenden Boxen eine der folgenden Bedingungen erfüllt ist:
 		\pause
 		\begin{itemize}
 		\item In der Box liegt genau eine Lösung.
-		\item "Größe" der Box unter einer gewissen Schranke.
+		\item \glqq Größe\grqq{} der Box unter einer gewissen Schranke.
 		\end{itemize}
 		
 	\end{frame}
@@ -137,14 +140,49 @@
 	\section{Probleme und Verbesserungen}
 	\begin{frame}{Schlechte Laufzeit}
 		\begin{itemize}
-		\item Intervallarithmetik als "newstruct" in Singular implementiert
+		\item Intervallarithmetik als \glqq newstruct\grqq{} in Singular implementiert
 		\item Invertieren einer Intervall-Matrix NP-schwer
 		\end{itemize}
+	\bigskip
 	\underline{Unsere Verbesserungen:}
 	\pause
 		\begin{itemize}
 		\item Auslagerung der Intervallarithmetik in C++  (dynamische Moduln in Singular)
 		\item Einbinden dieser Teil des Codes als .so 
+		\end{itemize}
+	\end{frame}
+	
+	\begin{frame}{Große Brüche}
+		\begin{itemize}
+			\pause
+			\item Schneiden von Boxen $\rightarrow$ teilweise sehr große Brüche $\rightarrow$ langsam
+			\pause
+			\item Idee: "Runden" von Brüchen 
+			\pause
+			\item Umsetzung: Vergrößere die Box ein bisschen, um schönere Darstellung zu erzielen
+		\end{itemize}
+		\bigskip
+		\pause
+		
+		$\implies$ Dadurch annehmbare Laufzeit sogar bei fünf Variablen.
+	\end{frame}
+	
+	\begin{frame}{Schlechte Startboxen}
+	\pause
+	\begin{lemma}
+	Sei $I$ ein Ideal des Polynomrings $K[x_1, \hdots, x_n]$, wobei $K$ ein Körper ist. Die folgenden Aussagen sind äquivalent:
+	\begin{itemize}
+	 	\item[a)] $I$ ist nulldimensional.
+		\item[b)] $I \cap K[x_i] \neq \{0\}$ für $i=1,\hdots, n$.
+	\end{itemize}
+	\pause
+	\end{lemma}
+		\begin{itemize}
+		\item Bestimme Gröbnerbasis des Ideals mit einer Eliminationsordnung.
+		\pause
+		\item $\implies$ Erste Gleichung hängt nur von einer Variablen ab.
+		\pause
+		\item Wende darauf unseren Exclusiontest an $\rightarrow$ bekommen bessere Startboxen für eine Variable.
 		\end{itemize}
 	\end{frame}
 	
@@ -158,9 +196,9 @@
 	\underline{Unsere Verbesserungen:}
 	\begin {itemize}
 	\pause
-	\item Falls Nullstelle auf der Ebene liegt, an der wir die Box bei Biosektion zerteilen $\implies$ nie Eindeutigkeit der Lösung mit Newton Step.
+	\item Falls Nullstelle auf der Ebene liegt, an der wir die Box bei Bisektion zerteilen $\implies$ nie Eindeutigkeit der Lösung mit Newton Step.
 	\pause
-	\item Verbesserung der Algorithmus "splitBox" durch:
+	\item Verbesserung der Algorithmus \glqq splitBox \grqq{} durch:
 	\pause
 		\begin{itemize}
 		\item Werte Ideal an der Zerteilungsebene aus. 
@@ -178,26 +216,15 @@
 	
 	%Literatur
 	
-	
-	%\begin{frame}{Ein erstes Thema}{Ein Untertitel}
-	%ABCx
-	%\begin{lemma}[Ein Beispiellemma]
-	%	Ist das hier und es gilt. 
-	%\end{lemma}
-	%\begin{example}
-	%	Ein Beispiel, wie dieses hier
-	%\end{example}
-	%\alert{ACHTUNG!}
-	%	Etwas Hervorgehobenes. Die Farben sind bisher alle dem Handbuch zum Corporate Design entnommen.
-	%\end{frame}
-	%\subsection{B}
-	%\begin{frame}{Ein Beweis}{Mit Untertitel}
-	%		\begin{proof}
-	%			Weil.
-	%		\end{proof}
-	%\end{frame}
-	%\begin{frame}[plain]{}{}%Ohne Titel und Untertitel damits ganz leer und wei√ü ist
-	%	Ich bin so ein leerer Frame
-	%\end{frame}
+	\begin{frame}{Literaturverzeichnis}
+	\bibliographystyle{alphadin}
+	\begin{thebibliography}{9}
+	\bibitem{Sommese} Andrew J. Sommese and Charles W. Wampler
+	\textit{The Numerical Solution of Systems of Polynomials}. [\textit{Arising in Engineering and Science}].
+	World Scientific Publishing Co. Pte. Ltd., 2005
+	\bibitem{Vasconcelos} Eisenbud, Grayson, Herzog, Stillman, Vasconcelos
+	\textit{Computational Methods in Commutative Algebra and Algebraic Geometry}. Springer Verlag Berlin-Heidelberg, 3. Auflage 2004
+	\end{thebibliography}
+	\end{frame}
 	
 \end{document}
