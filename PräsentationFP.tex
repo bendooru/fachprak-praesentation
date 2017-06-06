@@ -19,7 +19,7 @@
 \usepackage[ngerman]{babel} % Neue Rechtschreibung
 \usepackage{amsmath,amsthm,amssymb,euscript} % AMS-LaTeX  
 \usepackage{enumerate,graphicx}
-
+\usepackage{listings}
 
 % Load Theme
 \usetheme[noptsans,navigation=true, FB=Mathematik, frametotal=true]{TUKL}
@@ -122,7 +122,7 @@
 		\end{theorem}
 		\pause
 		
-		\underline{Implementierung:} 
+		\textbf{Implementierung:} 
 		\\
 		Bisektion bis für jede der entstehenden Boxen eine der folgenden Bedingungen erfüllt ist:
 		\pause
@@ -133,8 +133,61 @@
 		
 	\end{frame}
 	
-	\begin {frame}{testPolyBox und exclusionTest}
-		Codeausschnitte
+	\begin {frame}[fragile]{testPolyBox}
+	\lstset{language=C}
+	\begin{lstlisting}
+	for (i = 1; i <= ncols(I); i++) {
+		   tmp = evalPolyAtBox(I[i], B);
+		   // check if 0 contained in every interval
+		   // return -1 if not
+		   if (tmp[1]*tmp[2] > 0){return(-1, B); } 
+		}
+	 
+	//now: Newton Step
+	box Bcenter = boxCenter(B);
+	ivmat J = evalJacobianAtBox(I, B);
+	list inverse = ivmatGaussian(J);
+
+	// only continue if J is invertible
+	if (!inverse[1]) { return(0, B); }
+	ivmat Jinverse = inverse[2];
+
+	\end{lstlisting}
+	\end{frame}
+	\begin {frame}[fragile]{testPolyBox}
+	\lstset{language=C}
+	\begin{lstlisting}
+	
+	// calculate Bcenter - f(B)^(-1)f(Bcenter)	
+	box fB = evalIdealAtBox(I, Bcenter);  
+	fB = Bcenter - (Jinverse * fB);
+	
+	// algorithm will not process box further, so do not modify
+	int laststep = boxIsInterior(fB, B);
+	
+	// else intersection is empty or non-trivial
+	def Bint = intersect(B, fB);
+	
+	\end{lstlisting}
+	\end{frame}
+	\begin {frame}[fragile]{testPolyBox}
+	\lstset{language=C}
+	\begin{lstlisting}
+
+	// if intersection is empty Bint == -1
+	if (typeof(Bint) == "int") { return(-1, B); }
+
+	// attempt simplification of fractions
+	... 
+	...
+		
+	if (laststep) { return(1, B); }
+
+	// no condition could be verified
+	return(0, B);
+    
+	\end{lstlisting}
+
 	\end{frame}
 	
 	\section{Probleme und Verbesserungen}
@@ -144,11 +197,11 @@
 		\item Invertieren einer Intervall-Matrix NP-schwer
 		\end{itemize}
 	\bigskip
-	\underline{Unsere Verbesserungen:}
+	\textbf{Unsere Verbesserungen:}
 	\pause
 		\begin{itemize}
 		\item Auslagerung der Intervallarithmetik in C++  (dynamische Moduln in Singular)
-		\item Einbinden dieser Teil des Codes als .so 
+		\item Einbinden dieses Teils des Codes als .so 
 		\end{itemize}
 	\end{frame}
 	
@@ -193,7 +246,7 @@
 		\\ $\rightsquigarrow$ \emph{Ziel:} Wollen keine Boxen, die auf Grund ihrer Größe vom Algorithmus nach Terminierung ausgegeben werden.
 		\end{itemize}
 	\pause
-	\underline{Unsere Verbesserungen:}
+	\textbf{Unsere Verbesserungen:}
 	\begin {itemize}
 	\pause
 	\item Falls Nullstelle auf der Ebene liegt, an der wir die Box bei Bisektion zerteilen $\implies$ nie Eindeutigkeit der Lösung mit Newton Step.
@@ -219,12 +272,20 @@
 	\begin{frame}{Literaturverzeichnis}
 	\bibliographystyle{alphadin}
 	\begin{thebibliography}{9}
-	\bibitem{Sommese} Andrew J. Sommese and Charles W. Wampler
-	\textit{The Numerical Solution of Systems of Polynomials}. [\textit{Arising in Engineering and Science}].
-	World Scientific Publishing Co. Pte. Ltd., 2005
+	\bibitem{Moore} Cloud, Kearfott, Moore
+	\textit{Introduction to Interval Analysis}.
+	Society for Industrial and Applied Mathematics, 2009.
+	
+	
 	\bibitem{Vasconcelos} Eisenbud, Grayson, Herzog, Stillman, Vasconcelos
-	\textit{Computational Methods in Commutative Algebra and Algebraic Geometry}. Springer Verlag Berlin-Heidelberg, 3. Auflage 2004
+	\textit{Computational Methods in Commutative Algebra and Algebraic Geometry}. Springer Verlag Berlin-Heidelberg, 3. Auflage 2004.
+	
+	\bibitem[A]{Sommese} Andrew J. Sommese and Charles W. Wampler
+	\textit{The Numerical Solution of Systems of Polynomials}. [\textit{Arising in Engineering and Science}].
+	World Scientific Publishing Co. Pte. Ltd., 2005.
+	
 	\end{thebibliography}
+	
 	\end{frame}
 	
 \end{document}
