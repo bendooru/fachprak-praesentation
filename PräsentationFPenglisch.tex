@@ -20,6 +20,7 @@
 \usepackage{amsmath,amsthm,amssymb,euscript} % AMS-LaTeX  
 \usepackage{enumerate,graphicx}
 \usepackage{listings}
+\usepackage{tikz}
 
 % Load Theme
 \usetheme[noptsans,navigation=true, FB=Mathematik, frametotal=true]{TUKL}
@@ -163,7 +164,16 @@
 			\pause
 			\item Realization: increase the size of the box a little bit, to get nicer fractions.
 		\end{itemize}
-		\bigskip
+		
+		\begin{center}
+		\begin{tikzpicture}[scale=1.75]
+		\fill [color=yellow]  (1.25,1) rectangle (1.75,2);
+		\draw[thick] (0,0) grid [step=1]     (2,2);
+		\draw[thick,red] (1.25,0.75) -- (1.25,2.25)-- (1.75,2.25) -- (1.75, 0.75) -- (1.25,0.75);
+		\draw [<-, very thick, blue] (1, 1.5) -- (1.25,1.5);
+		\draw [->, very thick, blue] (1.75,1.5) -- (2,1.5);
+		\end{tikzpicture}
+		\end{center}
 		\pause
 		
 		$\implies$ Thereby passable run time even for five variables.
