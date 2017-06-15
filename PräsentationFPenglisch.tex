@@ -76,23 +76,40 @@
 
 \section{Algorithm}
 \begin{frame}{Interval arithmetic}
-	\begin{definition}
-	Let $[x_1,x_2], [y_1,y_2]$ be real intervals. Then the elementary operations of interval arithmetic are defined as follows:
-	\begin{itemize}
-		\item Addition: $[x_1,x_2] + [y_1,y_2] = [x_1+y_1,x_2+y_2]$
-		\item Subtraction: $[x_1,x_2] - [y_1,y_2] = [x_1-y_2,x_2-y_1]$
-		\item Multiplication: $[x_1,x_2] \cdot [y_1,y_2] = [\min(x_1y_1,x_1y_2,x_2y_1,x_2y_2), \max(x_1y_1,x_1y_2,x_2y_1,x_2y_2)]$
-		\item Division: \\ $[x_1,x_2] / [y_1,y_2] = [x_1,x_2] \cdot 1/[y_1,y_2]$ \\where $1/[y_1,y_2]= [1/y_1, 1/y_2]$ if $0 \notin [y_1,y_2] $
-	\end{itemize}
-	\end{definition}
-
+    \begin{definition}
+    Let $[x_1,x_2], [y_1,y_2]$ be real intervals. Then the elementary operations of interval arithmetic are defined as follows:
+        \begin{itemize}
+            \item Addition: $[x_1,x_2] + [y_1,y_2] = [x_1+y_1,x_2+y_2]$
+            \item Subtraction: $[x_1,x_2] - [y_1,y_2] = [x_1-y_2,x_2-y_1]$
+            \item Multiplication: $[x_1,x_2] \cdot [y_1,y_2] = [\min(x_1y_1,x_1y_2,x_2y_1,x_2y_2), \max(x_1y_1,x_1y_2,x_2y_1,x_2y_2)]$
+            \item Division: \\ $[x_1,x_2] / [y_1,y_2] = [x_1,x_2] \cdot 1/[y_1,y_2]$ \\where $1/[y_1,y_2]= [1/y_1, 1/y_2]$ if $0 \notin [y_1,y_2] $
+        \end{itemize}
+    \end{definition}
 \end{frame}
+
+\begin{frame}{Interval arithmetic}
+    Further, as calculating $[x_1,x_2]^n = [x_1, x_2] \cdots [x_1,. x_2]$ generally yields a
+    loose bound it makes sense to define interval powers separately:
+    \begin{definition}
+        Let $I := [x_1, x_2]$ be a real interval, then the powers of $I$ are defined
+        as
+        \begin{align*}
+            I^n =
+            \begin{cases}
+                [x_1^n, x_2^n] & \text{if $n$ odd or $x_1 > 0$,} \\
+                [x_2^n, x_1^n] & \text{if $n$ even and $x_2 < 0$,} \\
+                [0, \max(x_1^n, x_2^n)] & \text{else, i.e. if $n$ even and $0\in I$.}
+            \end{cases}
+        \end{align*}
+    \end{definition}
+\end{frame}
+
 \begin{frame}{Interval arithmetic}
     \begin{definition}
-        Let  $\textbf{R} \subseteq \mathbb{R}^2$ be the set of all real intervals $[a,b],
+        Let  $\mathbf{R} \subseteq \mathbb{R}^2$ be the set of all real intervals $[a,b],
         a < b$. An interval extension of a map $g: \mathbb{R}^n \to \mathbb{R}$ is a map
-        $\textbf{g}: \textbf{R}^n \to \textbf{R}$ such that $g(x) \in
-        \textbf{g}(\textbf{x}) $ for all $x \in \mathbb{R}$.
+        $\mathbf{g}: \mathbf{R}^n \to \mathbf{R}$ such that $g(x) \in
+        \mathbf{g}(\mathbf{x}) $ for all $x \in \mathbb{R}$.
     \end{definition}
 
     This allows us to perform a simple exclusion test using interval arithmetic.
@@ -114,22 +131,22 @@
         \end{itemize}
     \end{itemize}
     \pause
-    To get this, we compute the interval Newton step of $f$ and a box $\textbf{x}$: $$
-    N(f, \textbf{x})= \hat{x} - \textbf{f'}(\textbf{x})^{-1}f(\hat{x})$$ (where $\hat{x}
-    \in \textbf{x}$ arbitrary point, $\textbf{f'}$ the interval extension of the Jacobian
-    matrix of $f$)
+    To get this, we compute the interval Newton step of $f$ and a box $\mathbf{x}$: $$
+    N(f, \mathbf{x})= \hat{x} - \mathbf{f'}(\mathbf{x})^{-1}f(\hat{x})$$ where $\hat{x}
+    \in \mathbf{x}$ arbitrary point, $\mathbf{f'}$ the interval extension of the Jacobian
+    matrix of $f$.
 \end{frame}
 
 % Vllt beispiel bei dem matrix invertiert wird??
 \begin{frame}{Interval Newton step}
     \begin{theorem}
-        Let $\textbf{x}$ be a box in $\mathbb{R}^n$ and $f:\mathbb{R}^n\to \mathbb{R}^n$.
+        Let $\mathbf{x}$ be a box in $\mathbb{R}^n$ and $f:\mathbb{R}^n\to \mathbb{R}^n$.
         Then it holds:
         \begin{enumerate}[a)]
-            \item Every solution in $\textbf{x}$ is also in $N(f,\textbf{x})$.
+            \item Every solution in $\mathbf{x}$ is also in $N(f,\mathbf{x})$.
                 \pause
-            \item If $N(f,\textbf{x}) \subseteq int(\textbf{x})$, then there is a unique
-                solution in $\textbf{x}$, i.e. $T(f,\textbf{x})=1$.
+            \item If $N(f,\mathbf{x}) \subseteq int(\mathbf{x})$, then there is a unique
+                solution in $\mathbf{x}$, i.e. $T(f,\mathbf{x})=1$.
         \end{enumerate}
     \end{theorem}
     \pause
@@ -209,7 +226,7 @@
     \end{center}
     \pause
 
-    $\implies$ Thereby acceptable run time even for five variables.
+    $\implies$ This results in acceptable run time even for five variables.
 \end{frame}
 
 \begin{frame}{Bad starting boxes}
@@ -268,10 +285,13 @@
         \item Currently use Singular's \texttt{number} type for easy integration into the
             interpreter
         \item may use floating point numbers instead for increasing speed
-        \item[] $\rightarrow$ requires conversion between Singular number types and C++
-            number types
-        \item[] $\rightarrow$ may require adaptively changing precision for certain
-            problems
+            \begin{itemize}
+                \item would allow using existing interval arithmetic libraries (MPFR,
+                    \dots), however:
+                \item requires conversion between Singular number types and C++ number
+                    types
+                \item may require adaptively changing precision for certain problems
+            \end{itemize}
     \end{itemize}
 \end{frame}
 
