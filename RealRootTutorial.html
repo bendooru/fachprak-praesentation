@@ -1,38 +1,36 @@
 Singular online<html>
   <head>
-    <title> Tutorial: real root isolation</title>
+    <title>Tutorial: Real Root Isolation</title>
   </head>
 <body>
 
 <div>
-  <h4>Interval arithmetic and exclusionTest</h4>
-  <p>Integrate the interval arithmetic and the library with the exclusionTest.</p>
-  <code>LIB "intervalPureSingular.lib";</code><br>
+  <h4>Interval Arithmetic and Exclusion Test</h4>
+  <p>Integrate the interval arithmetic and the library with the exclusion test.</p>
+  <!-- schonmal im Voraus richtiger Name -->
+  <code>LIB "interval.lib";</code><br>
 
-  <p>Define a ring</p>
+  <p>Define the ring $R = \mathbb{Q}[x,y]$</p>
 
-  <code>ring R=0,(x,y),lp;</code><br>
-  
-  <p>Define an ideal $I$ with two ellipses as generators. </p>
+  <code>ring R = 0,(x,y),lp;</code><br>
+
+  <p>and define an ideal $I \trianglelefteq R$ with two ellipses as generators.</p>
   <code>ideal I = 2x2-xy+2y2-2, 2x2-3xy+3y2-2;</code><br>
-  
-  <p>This ideal is a zero-dimensional radical ideal what can be proved using the Singular functions vdim and radical from primdec.lib.</p>
 
-  <p>Now define the starting box. Therefore first define an interval i=[-3/2,3/2]</p>
-  <code> interval i=bounds(-3/2,3/2);i;</code><br>
-  
+  <p>This ideal is a zero-dimensional radical ideal which can be checked using the Singular functions <tt>vdim</tt> and <tt>radical</tt> from <tt>primdec.lib</tt>.</p>
+
+  <p>Now define the starting box. Therefore first define an interval $i=[-3/2,3/2]$</p>
+  <code>interval i = bounds(-3/2, 3/2); i;</code><br>
+
   <p>With this interval we can define a box:</p>
   <p>$$ B=i \times i= [-3/2,3/2] \times [-3/2,3/2]$$ </p>
   <code>box B=list(i,i); B;</code><br>
-  
-  <p>We take this box for as starting box for the algorithm exclusionTest. 
-  It can easily be seen that there are exactly four intersection points of the curves $2x^2-xy+2y^2-2$ and $2x^2-3xy+3y^2-2$.
-  The algorithm states the same. </p>
-  
+
+  <p>We take this box as a starting box for the procedure <tt>exclusionTest</tt>.
+  It can easily be seen that there are exactly four intersection points of the curves $2x^2-xy+2y^2=2$ and $2x^2-3xy+3y^2=2$.
+  The algorithm confirms this as they all lie in $B$.</p>
+
   <code> list result=exclusionTest(I,B,0); result; </code> <br>
-  
-	
- 
 </div>
 
 <!-- <div> -->
