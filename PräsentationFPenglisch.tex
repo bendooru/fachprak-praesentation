@@ -277,6 +277,19 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}
+    \begin{itemize}
+        \item Extension to interval division: in one-dimensional case it makes sense to
+            define $1/[x_1, x_2] = (-\infty, 1/x_1] \cup [1/x_2, \infty)$ if $x_1 < 0 <
+            x_2$
+        \item[]$\rightarrow$ intervals stay finite since we intersect afterewards
+        \item[]$\rightarrow$ Newton step converges to two separate roots
+        \item may in some cases allow matrix inversion to succeed more often
+        \item However: representing $\infty$ in intermediate steps requires special
+            handling in the implementation
+    \end{itemize}
+\end{frame}
+
 %Literatur
 
 \begin{frame}{Bibliography}
