@@ -191,6 +191,81 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Gaussian elimination for interval matrices}
+	\begin{definition}
+	An interval matrix $\mathbf{A}=[A_1,A_2] \in \mathbf{R}^{n \times n} $ where $A_1, A_2 \in \mathbb{R}^{n\times n}$ are the lower and upper bound of the matrix is called regular, if all real matrices $A \in \mathbf{A}$ are regular. Otherwise $\mathbf{A} $ is called singular.\\
+	An interval matrix B is called an inverse of a regular interval matrix $\mathbf{A} $ if it contains the inverse of each real matrix $A \in \mathbf{A}$.
+	
+	%An interval matrix $A$ is nonsingular if it doesn't contain a singular matrix.
+	\end{definition}
+	\pause
+	We can invert regular interval matrices with Gaussian elimination:\\
+	For example, invert the matrix
+	\[
+	\left[
+	\begin{array}{cc}
+	[1,2]&[2,3] \\
+	
+	[0,0]&[2,3]\\
+	\end{array}
+	\right]
+	\]
+
+\end{frame}
+
+\begin{frame}
+\[
+	\left[
+	\begin{array}{cc|cc}
+	[1,2]&[2,3]&[1,1]&[0,0]  \\
+	
+	[0,0]&[2,3]&[0,0]&[1,1]  \\
+	\end{array}
+	\right]
+	\]
+	
+	\pause
+	
+	$\xrightarrow[\text{}]{\text{'2.row' $ \div  [2,3]$}}$
+	\[
+	\left[
+	\begin{array}{cc|cc}
+	[1,2]&[2,3]&[1,1]&[0,0]  \\
+	
+	[0,0]&[1,1]&[0,0]&[1/3,1/2]  \\
+	\end{array}
+	\right]
+	\]
+
+	\pause
+	
+	$\xrightarrow[\text{}]{\text{'1.row' $ - [2,3]\cdot$'2.row'}}$
+	\[
+	\left[
+	\begin{array}{cc|cc}
+	[1,2]&[0,0]&[1,1]&[-3/2,-2/3]  \\
+	
+	[0,0]&[1,1]&[0,0]&[1/3,1/2]  \\
+	\end{array}
+	\right]
+	\]
+	
+	\pause
+	
+	$\xrightarrow[\text{}]{\text{'1.row' $\div  [1,2]$}}$
+	\[
+	\left[
+	\begin{array}{cc|cc}
+	[1,1]&[0,0]&[1/2,1]&[-3/2,-1/3]  \\
+	
+	[0,0]&[1,1]&[0,0]&[1/3,1/2]  \\
+	\end{array}
+	\right]
+	\]
+
+
+\end{frame}
+
 \begin{frame}{Big fractions}
     \begin{itemize}
         \item intersecting boxes $\rightarrow$ sometimes really big fractions $\rightarrow$ slow
