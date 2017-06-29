@@ -8,15 +8,15 @@ Singular online<html>
   <h4>Interval Arithmetic and Exclusion Test</h4>
   <p>Integrate the interval arithmetic and the library with the exclusion test.</p>
   <!-- schonmal im Voraus richtiger Name -->
-  <code>LIB "interval.lib";</code><br>
+  <code>LIB "rootisolation.lib";</code><br>
 
   <p>Define the ring $R = \mathbb{Q}[x,y]$</p>
 
   <code>ring R = 0,(x,y),lp;</code><br>
 
-  <p>and define an ideal $I \trianglelefteq R$ with two ellipses as generators.</p>
-  <code>ideal I = 2x2-xy+2y2-2, 2x2-3xy+3y2-2;</code><br>
-
+  <p>and define an ideal $I \trianglelefteq R$ with two ellipses as generators.<br>
+  <code>ideal I = 2x2-xy+2y2-2, 2x2-3xy+3y2-2;</code><br> </p>
+  
   <p>This ideal is a zero-dimensional radical ideal which can be checked using the Singular functions <tt>vdim</tt> and <tt>radical</tt> from <tt>primdec.lib</tt>.</p>
 
   <p>Now define the starting box. Therefore first define an interval $i=[-3/2,3/2]$</p>
@@ -30,7 +30,7 @@ Singular online<html>
   It can easily be seen that there are exactly four intersection points of the curves $2x^2-xy+2y^2=2$ and $2x^2-3xy+3y^2=2$.
   The algorithm confirms this as they all lie in $B$.</p>
 
-  <code> list result=exclusionTest(I,B,0); result; </code> <br>
+  <code> list result=rootIsolation(I,B,0); result; </code> <br>
 </div>
 
 <!-- <div> -->
