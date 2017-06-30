@@ -72,7 +72,7 @@
 \end{frame}
 
 \section{Algorithm}
-\begin{frame}{Interval arithmetic}
+\begin{frame}{Interval Arithmetic}
     \begin{definition}
     Let $[x_1,x_2], [y_1,y_2]$ be real intervals. Then the elementary operations of interval arithmetic are defined as follows:
         \begin{itemize}
@@ -84,7 +84,7 @@
     \end{definition}
 \end{frame}
 
-\begin{frame}{Interval arithmetic}
+\begin{frame}{Interval Arithmetic}
     Further, as calculating $[x_1,x_2]^n = [x_1, x_2] \cdots [x_1,. x_2]$ generally yields a
     loose bound it makes sense to define interval powers separately:
     \begin{definition}
@@ -101,7 +101,7 @@
     \end{definition}
 \end{frame}
 
-\begin{frame}{Interval arithmetic}
+\begin{frame}{Interval Arithmetic}
     \begin{definition}
         Let  $\mathbf{R} \subseteq \mathbb{R}^2$ be the set of all real intervals $[a,b],
         a < b$. An interval extension of a map $g: \mathbb{R}^n \to \mathbb{R}$ is a map
@@ -133,7 +133,7 @@
 \end{frame}
 
 % Vllt beispiel bei dem matrix invertiert wird??
-\begin{frame}{Interval Newton step}
+\begin{frame}{Interval Newton Step}
     \begin{theorem}
         Let $\mathbf{x}$ be a box in $\mathbb{R}^n$ and $f:\mathbb{R}^n\to \mathbb{R}^n$.
         Then it holds:
@@ -145,13 +145,15 @@
     \end{theorem}
     \pause
 
-    \textbf{Implementation:} \\
+    \textbf{Implementation:}
+
     %Bisection until for every of the arising boxes one of the following conditions is satisfied:
     Bisection until every box satisfies one of the following conditions:
     \begin{itemize}
         \item there is exactly one solution in the box
         \item \enquote{size} of the box is below a given bound.
     \end{itemize}
+    If $T(f, \mathbf x) = 0$ we continue with the box $N(f,\mathbf x) \cap \mathbf x$.
 \end{frame}
 
 
@@ -176,7 +178,7 @@
 \end{frame}
 
 \section{Problems \& Improvements}
-\begin{frame}{Bad run time}
+\begin{frame}{Bad Run Time}
     \begin{itemize}
         \item interval arithmetic implemented as a \enquote{newstruct} in Singular
         \item inverting of an interval matrix difficult
@@ -192,15 +194,21 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Gaussian elimination for interval matrices}
+\begin{frame}{Gaussian Elimination for Interval Matrices}
     \begin{definition}
-    An interval matrix $\mathbf{A}=[A_1,A_2] \in \mathbf{R}^{n \times n} $ where $A_1, A_2 \in \mathbb{R}^{n\times n}$ are the lower and upper bound of the matrix is called regular, if all real matrices $A \in \mathbf{A}$ are regular. Otherwise $\mathbf{A} $ is called singular.\\
-    An interval matrix B is called an inverse of a regular interval matrix $\mathbf{A} $ if it contains the inverse of each real matrix $A \in \mathbf{A}$.
+        An interval matrix $\mathbf{A}=[A_1,A_2] \in \mathbf{R}^{n \times n} $ where $A_1,
+        A_2 \in \mathbb{R}^{n\times n}$ are the lower and upper bound of the matrix is
+        called regular, if all real matrices $A \in \mathbf{A}$ are regular. Otherwise
+        $\mathbf{A} $ is called singular.
 
-    %An interval matrix $A$ is nonsingular if it doesn't contain a singular matrix.
+        An interval matrix $\mathbf B$ is called an inverse of a regular interval matrix
+        $\mathbf{A} $ if it contains the inverse of each real matrix $A \in \mathbf{A}$.
+
+        An interval matrix $\mathbf A$ is regular if it doesn't contain a singular matrix.
     \end{definition}
     \pause
-    We can invert regular interval matrices with Gaussian elimination:\\
+    We can invert regular interval matrices with Gaussian elimination:
+
     For example, invert the matrix
     \[
     \left[
@@ -214,7 +222,7 @@
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Example}
 \[
     \left[
     \begin{array}{cc|cc}
@@ -263,24 +271,25 @@
     \end{array}
     \right]
     \]
-
-
 \end{frame}
 
-\begin{frame}{Big fractions}
+\begin{frame}{Large Fractions}
     \begin{itemize}
-        \item intersecting boxes $\rightarrow$ sometimes really big fractions $\rightarrow$ slow
+        \item interval matrix inversion $\rightarrow$ sometimes really \enquote{large}
+            fractions $\rightarrow$ slow
         \item Idea: \enquote{round} the boxes
-        \item Realization: increase the size of the box a little bit, to get nicer fractions.
+        \item[]$\rightarrow$ increase the size of the intersection a little bit to get
+            nicer fractions.
     \end{itemize}
     \bigskip
     \pause
 
     \begin{center}
-        \begin{tikzpicture}[scale=1.75]
+        \begin{tikzpicture}[scale=1.6]
             \fill [color=yellow]  (1.25,1) rectangle (1.75,2);
-            \draw[thick] (0,0) grid [step=1]     (2,2);
-            \draw[thick,red] (1.25,0.75) -- (1.25,2.25)-- (1.75,2.25) -- (1.75, 0.75) -- (1.25,0.75);
+            \draw[thick] (0,0) grid [step=1]     (2,2) node[right]  {$\mathbf x$};
+            \draw[thick,red] (1.25,0.75) -- (1.25,2.25) -- (1.75,2.25) node[right]
+            {$N(f, \mathbf x)$} -- (1.75, 0.75) -- (1.25,0.75);
             \draw[dashed, red, thick] (1.125,1) -- (1.125,2);
             \draw[dashed, red, thick] (1.875,1) -- (1.875,2);
             \draw [->, very thick, blue] (1.25, 1.5) -- (1.125,1.5);
@@ -292,7 +301,7 @@
     $\implies$ This results in acceptable run time even for five variables.
 \end{frame}
 
-\begin{frame}{Bad starting boxes}
+\begin{frame}{Bad Starting Boxes}
     \begin{lemma}
         Let $I$ be an ideal of the polynomial ring $K[x_1, \hdots, x_n]$, where $K$ is a
         field. Then the following are equivalent:
@@ -308,13 +317,13 @@
         \item[] $\implies$ First equation only depends of one variable.
         \pause
         \item Apply our exclusion test on this equation $\rightarrow$ we get better
-            starting boxes for this variable.
+            starting intervals for this variable.
         \item Do this for all variables (by permuting the variables).
-        \item Take the Cartesian product of all those boxes as starting boxes.
+        \item Take the Cartesian product of all those intervals as starting boxes.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Boxes with unique solutions}
+\begin{frame}{Boxes with Unique Solutions}
     \begin {itemize}
         \item So far: Input consisting of an ideal, starting box and a bound for the size
             of the boxes.
@@ -353,7 +362,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Extended Interval Division}
     \begin{itemize}
         \item Extension to interval division: in one-dimensional case it makes sense to
             define $1/[x_1, x_2] = (-\infty, 1/x_1] \cup [1/x_2, \infty)$ if $x_1 < 0 <
@@ -361,6 +370,7 @@
         \item[]$\rightarrow$ intervals stay finite since we intersect afterewards
         \item[]$\rightarrow$ Newton step converges to two separate roots
         \item may in some cases allow matrix inversion to succeed more often
+        \item[]$\rightarrow$ probably not helpful with more than one variable
         \item However: representing $\infty$ in intermediate steps requires special
             handling in the implementation
     \end{itemize}
